@@ -17,7 +17,7 @@ This is a simple web application that allows users to enter a zip code and autom
 ## How to Use
 
 1. Clone the repository or download the source code.
-2. Open the `index.html` file in a web browser.
+2. Open the `autoFillAddress.html` file in a web browser.
 3. Enter a zip code in the provided input field.
 4. The address corresponding to the zip code will be automatically filled in the address output field.
 5. To reset the form, click the "Reset" button.
