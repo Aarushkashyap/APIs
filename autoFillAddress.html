@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Address Autocomplete</title>
+</head>
+<body>
+  <h2>Address Autocomplete</h2>
+  <form>
+    <label for="zip-code">Zip Code:</label>
+    <input type="text" id="zip-code-input" placeholder="Enter zip code" />
+
+    <label for="address">Address:</label>
+    <input type="text" id="address-input" placeholder="Auto-filled address" readonly />
+
+    <button type="button" id="reset-button">Reset</button>
+  </form>
+
+  <script>
+    function getAddressFromZipCode(zipCode) {
+      const API_URL = `https://nominatim.openstreetmap.org/search?postalcode=${zipCode}&format=json`;
+
+      fetch(API_URL)
+        .then(response => response.json())
+        .then(data => {
+          if (data.length > 0) {
+            const address = data[0].display_name;
+            const addressInput = document.getElementById('address-input');
+            addressInput.value = address;
+            addressInput.style.width = `${address.length + 2}ch`;
+          } else {
+            document.getElementById('address-input').value = 'Address not found';
+          }
+        })
+        .catch(error => {
+          console.error('An error occurred:', error);
+        });
+    }
+
+    function handleZipCodeChange() {
+      const zipCodeInput = document.getElementById('zip-code-input');
+      const addressInput = document.getElementById('address-input');
+      const zipCode = zipCodeInput.value;
+
+      // Check if zip code contains alphabets
+      if (/[a-zA-Z]/.test(zipCode)) {
+        addressInput.value = '';
+        addressInput.style.width = 'auto';
+        alert('Invalid input. Please enter a numeric zip code.');
+        zipCodeInput.value='';
+      } else {
+        getAddressFromZipCode(zipCode);
+      }
+    }
+
+    function handleReset() {
+      document.getElementById('zip-code-input').value = '';
+      document.getElementById('address-input').value = '';
+      document.getElementById('address-input').style.width = 'auto';
+    }
+
+    const zipCodeInput = document.getElementById('zip-code-input');
+    zipCodeInput.addEventListener('input', handleZipCodeChange);
+
+    const resetButton = document.getElementById('reset-button');
+    resetButton.addEventListener('click', handleReset);
+  </script>
+</body>
+</html>
